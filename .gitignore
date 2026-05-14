@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# Obsidian — 개인 작업 상태 (세션마다 바뀜)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+
+# Obsidian — 플러그인 바이너리 (마켓플레이스에서 설치)
+.obsidian/plugins/*/main.js
+.obsidian/plugins/*/styles.css
+
+# raw 소스 파일 — 각자의 자료이므로 공유하지 않음
+raw/**
+!raw/assets/
+!raw/.gitkeep
+
+# wiki 생성 콘텐츠 — 각자의 위키이므로 공유하지 않음
+wiki/**
+!wiki/index.md
+!wiki/log.md
+
+# 빈 폴더 유지용 파일은 추적
+!**/.gitkeep
