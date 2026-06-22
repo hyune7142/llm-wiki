@@ -1,0 +1,49 @@
+{
+	"schemaVersion": "0.1.0",
+	"name": "유튜브",
+	"behavior": "create",
+	"noteContentFormat": "![{{title}}]({{url}})\n\n{{description}}\n\n---\n\n{{content}}",
+	"properties": [
+		{
+			"name": "title",
+			"value": "{{title}}",
+			"type": "text"
+		},
+		{
+			"name": "source",
+			"value": "{{url}}",
+			"type": "text"
+		},
+		{
+			"name": "channel",
+			"value": "{{author}}",
+			"type": "text"
+		},
+		{
+			"name": "published",
+			"value": "{{published}}",
+			"type": "date"
+		},
+		{
+			"name": "created",
+			"value": "{{date}}",
+			"type": "date"
+		},
+		{
+			"name": "description",
+			"value": "{{description}}",
+			"type": "text"
+		},
+		{
+			"name": "tags",
+			"value": "youtube",
+			"type": "multitext"
+		}
+	],
+	"triggers": [
+		"youtube.com",
+		"youtu.be"
+	],
+	"noteNameFormat": "{{title}}",
+	"path": "raw/youtube"
+}

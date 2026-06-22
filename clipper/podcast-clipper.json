@@ -1,0 +1,56 @@
+{
+	"schemaVersion": "0.1.0",
+	"name": "팟캐스트",
+	"behavior": "create",
+	"noteContentFormat": "{{content}}",
+	"properties": [
+		{
+			"name": "title",
+			"value": "{{title}}",
+			"type": "text"
+		},
+		{
+			"name": "source",
+			"value": "{{url}}",
+			"type": "text"
+		},
+		{
+			"name": "show",
+			"value": "{{site}}",
+			"type": "text"
+		},
+		{
+			"name": "host",
+			"value": "{{author|split:\", \"|wikilink|join}}",
+			"type": "multitext"
+		},
+		{
+			"name": "published",
+			"value": "{{published}}",
+			"type": "date"
+		},
+		{
+			"name": "created",
+			"value": "{{date}}",
+			"type": "date"
+		},
+		{
+			"name": "description",
+			"value": "{{description}}",
+			"type": "text"
+		},
+		{
+			"name": "tags",
+			"value": "podcast",
+			"type": "multitext"
+		}
+	],
+	"triggers": [
+		"open.spotify.com/episode",
+		"podcasts.apple.com",
+		"podbean.com",
+		"anchor.fm"
+	],
+	"noteNameFormat": "{{title}}",
+	"path": "raw/podcasts"
+}

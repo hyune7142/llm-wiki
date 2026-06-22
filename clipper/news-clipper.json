@@ -1,0 +1,66 @@
+{
+	"schemaVersion": "0.1.0",
+	"name": "뉴스",
+	"behavior": "create",
+	"noteContentFormat": "{{content}}",
+	"properties": [
+		{
+			"name": "title",
+			"value": "{{title}}",
+			"type": "text"
+		},
+		{
+			"name": "source",
+			"value": "{{url}}",
+			"type": "text"
+		},
+		{
+			"name": "author",
+			"value": "{{author}}",
+			"type": "text"
+		},
+		{
+			"name": "outlet",
+			"value": "{{site}}",
+			"type": "text"
+		},
+		{
+			"name": "published",
+			"value": "{{published}}",
+			"type": "date"
+		},
+		{
+			"name": "created",
+			"value": "{{date}}",
+			"type": "date"
+		},
+		{
+			"name": "description",
+			"value": "{{description}}",
+			"type": "text"
+		},
+		{
+			"name": "tags",
+			"value": "news",
+			"type": "multitext"
+		}
+	],
+	"triggers": [
+		"n.news.naver.com",
+		"news.naver.com",
+		"chosun.com",
+		"joongang.co.kr",
+		"joins.com",
+		"hani.co.kr",
+		"yna.co.kr",
+		"ytn.co.kr",
+		"zdnet.co.kr",
+		"bloter.net",
+		"reuters.com",
+		"bbc.com/news",
+		"theverge.com",
+		"techcrunch.com"
+	],
+	"noteNameFormat": "{{title}}",
+	"path": "raw/news"
+}
