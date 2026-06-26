@@ -13,12 +13,25 @@
 # raw 소스 파일 — 각자의 자료이므로 공유하지 않음
 raw/**
 !raw/assets/
-!raw/.gitkeep
+!raw/.manifest.json
 
 # wiki 생성 콘텐츠 — 각자의 위키이므로 공유하지 않음
+# 단, 템플릿 구조 파일(scaffold)은 추적
 wiki/**
 !wiki/index.md
 !wiki/log.md
+!wiki/hot.md
+!wiki/overview.md
+!wiki/sources/
+!wiki/sources/_index.md
+!wiki/entities/
+!wiki/entities/_index.md
+!wiki/concepts/
+!wiki/concepts/_index.md
+!wiki/comparisons/
+!wiki/comparisons/_index.md
+!wiki/questions/
+!wiki/questions/_index.md
 
 # 빈 폴더 유지용 파일은 추적
 !**/.gitkeep
