@@ -5,6 +5,7 @@
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
 .obsidian/cache
+.obsidian/community-plugins.json
 
 # Obsidian — 플러그인 바이너리 (마켓플레이스에서 설치)
 .obsidian/plugins/*/main.js
@@ -12,10 +13,6 @@
 
 # raw 소스 파일 — 각자의 자료이므로 공유하지 않음
 raw/**
-!raw/assets/
-!raw/assets/.gitkeep
-!raw/research/
-!raw/research/.gitkeep
 !raw/.manifest.json
 
 # wiki 생성 콘텐츠 — 각자의 위키이므로 공유하지 않음
