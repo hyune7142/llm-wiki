@@ -36,6 +36,8 @@ Git이 없다면 GitHub 페이지에서 `Code → Download ZIP`으로 받아도 
 Obsidian 실행 → `Open folder as vault` → 받은 폴더 선택.  
 그래프 뷰에서 위키 연결 구조를 시각적으로 볼 수 있습니다.
 
+> `.obsidian/` 설정이 이미 포함되어 있어 테마·그래프 설정이 자동 적용됩니다. 별도 설정 없이 바로 사용 가능합니다.
+
 **3. Claude Code 실행**
 
 ```bash
@@ -78,8 +80,24 @@ Claude가 위키 이름, 다루는 주제, 목적 등을 질문하면서 설정 
 
 | 커맨드 | 하는 일 |
 |---|---|
-| `/wiki-obsidian-markdown` | Obsidian 전용 문법 자동 적용. `[[위키링크]]`, 콜아웃, frontmatter 등 |
+| `/wiki-obsidian-markdown` | 기존 마크다운 파일에 Obsidian 전용 문법 적용. 일반 링크를 `[[위키링크]]`로 변환, 콜아웃 추가, 파일 속성 정보 보완 등. 외부에서 가져온 메모를 위키 형식으로 변환할 때 유용. |
 | `/wiki-defuddle` | URL에서 광고·네비게이션 제거 후 깔끔한 마크다운 추출 (defuddle 설치 필요) |
+
+### 마케팅 확장 (선택)
+
+이 템플릿에는 마케팅 도메인 특화 커맨드 30개가 포함돼 있습니다. 마케팅 위키를 운영하거나 위키와 함께 마케팅 작업을 할 때 활용합니다. 커맨드 없이 자연어로 요청해도 됩니다.
+
+| 카테고리 | 커맨드 예시 | 하는 일 |
+|---|---|---|
+| 전략·기획 | `/marketing-product-marketing`, `/marketing-marketing-plan` | 포지셔닝·시장 진출 전략·로드맵 |
+| 고객·리서치 | `/marketing-customer-research`, `/marketing-competitor-profiling` | 핵심 고객 프로필·경쟁사 분석 |
+| 카피·콘텐츠 | `/marketing-copywriting`, `/marketing-social`, `/marketing-video` | 카피·SNS·영상 스크립트 |
+| 광고·트래픽 | `/marketing-ads`, `/marketing-seo-audit`, `/marketing-ai-seo` | 유료광고·검색 최적화·AI 검색 최적화 |
+| 전환·리텐션 | `/marketing-cro`, `/marketing-onboarding`, `/marketing-pricing` | 전환율·가격·이탈 방지 |
+| 이메일·메시지 | `/marketing-emails`, `/marketing-cold-email` | 자동화 이메일 시리즈·기업 영업 메일 |
+| 영업·파트너십 | `/marketing-sales-enablement`, `/marketing-referrals` | 영업 발표자료·추천 프로그램 |
+
+전체 목록은 `SKILLS.md` 참고. 마케팅 커맨드 결과를 위키에 저장하려면 `/wiki-save`를 씁니다.
 
 ---
 
@@ -93,7 +111,7 @@ Claude가 위키 이름, 다루는 주제, 목적 등을 질문하면서 설정 
 │   └── .manifest.json      ← 처리된 소스 추적 (중복 ingest 방지)
 ├── wiki/                   ← AI가 만들고 관리하는 위키 페이지
 │   ├── index.md            ← 전체 페이지 목차 (query 시 진입점)
-│   ├── log.md              ← ingest 및 수정된 lint 기록 (append-only)
+│   ├── log.md              ← ingest 및 수정된 lint 기록 (추가만 가능, 수정·삭제 없음)
 │   ├── hot.md              ← 최근 ingest/lint 수정 컨텍스트 요약 — 새 세션 시작 시 먼저 읽힘
 │   ├── overview.md         ← 위키 전체 목적·현황
 │   ├── sources/            ← 소스 1개당 요약 페이지 1개
@@ -101,7 +119,7 @@ Claude가 위키 이름, 다루는 주제, 목적 등을 질문하면서 설정 
 │   ├── concepts/           ← 아이디어·패턴·프레임워크 페이지
 │   ├── comparisons/        ← A vs B 비교 분석 페이지
 │   └── questions/          ← 저장된 질의응답 아카이브
-├── _templates/             ← 노트 유형별 프론트매터 템플릿
+├── _templates/             ← 노트 유형별 파일 속성 정보 템플릿
 ├── clipper/                ← Obsidian Web Clipper 설정 파일
 ├── extensions/marketing/   ← 마케팅 도메인 확장 설명
 ├── exports/                ← 사용자가 외부 활용할 결과물 (스냅샷, 공유용)
@@ -133,6 +151,9 @@ Wiki core는 `wiki-*` 커맨드와 `scripts/`가 담당합니다. `.claude/comma
 **raw/ 파일을 넣었는데 Claude가 처리를 안 함**  
 → 파일을 넣은 뒤 직접 "raw/파일명 처리해줘"라고 말해야 합니다. 자동으로 감지하지는 않습니다.
 
+**`/wiki-web-research` 결과가 위키에 바로 안 들어감**  
+→ `/wiki-web-research`는 `raw/research/`에 저장만 합니다. 내용을 확인한 뒤 "raw/research/파일명 처리해줘"로 위키에 추가해야 반영됩니다. 검토 없이 바로 위키화하려면 "리서치하고 바로 ingest해줘"라고 요청하면 됩니다.
+
 ---
 
 ## 팁
@@ -140,6 +161,7 @@ Wiki core는 `wiki-*` 커맨드와 `scripts/`가 담당합니다. `.claude/comma
 - `/wiki-lint`를 주기적으로 돌려두면 위키 품질이 유지됩니다.
 - 위키가 쌓이면 Obsidian 그래프 뷰에서 어떤 개념이 허브가 되는지 한눈에 보입니다.
 - 그냥 마크다운 파일 모음이라 git이 그대로 됩니다. 버전 관리, 브랜치, 협업 다 가능합니다.
+- `.claude/web-research-program.md`를 열어 검색 도메인·신뢰도 기준·루프 제한을 조정하면 `/wiki-web-research` 결과 품질이 높아집니다. 예시 설정이 주석으로 포함되어 있습니다.
 
 ---
 
@@ -197,3 +219,9 @@ Claude Code 외 도구(Cursor, Gemini CLI 등)에서도 동일한 위키 운영�
 ## RAG와 다른 점
 
 ChatGPT나 NotebookLM처럼 매번 원본 문서를 뒤지는 방식이 아닙니다. 소스를 한 번 읽고 위키를 만들어두면, 다음 질문부터는 이미 정리된 위키를 보고 답합니다. 소스가 쌓일수록 위키도 같이 풍부해지는 구조입니다.
+
+---
+
+## 라이선스
+
+MIT License. 자유롭게 사용·수정·배포 가능합니다.
