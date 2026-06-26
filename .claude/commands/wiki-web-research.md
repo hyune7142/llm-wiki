@@ -66,7 +66,7 @@ defuddle 미설치 시 WebFetch 사용.
 
 ## raw 파일 생성
 
-수집 완료 후 `raw/research/YYYY-MM-DD-[주제-슬러그].md` 파일 하나를 생성한다.
+수집 완료 후 `raw/research/YYYY-MM-DD-[주제-슬러그].md` 파일 하나를 생성한다. 날짜는 한국시간(Asia/Seoul) 기준 `YYYY-MM-DD`를 사용한다.
 
 ```markdown
 ---

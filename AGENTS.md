@@ -35,7 +35,8 @@ Claude Code에서는 CLAUDE.md + `.claude/commands/`가 동일한 역할을 함.
 ```
 raw/
 ├── .manifest.json   # 처리된 소스 추적 (hash + 생성 페이지 목록)
-└── assets/          # 이미지 등 첨부파일
+├── assets/          # 이미지 등 첨부파일
+└── research/        # 웹 리서치 결과 임시 저장
 
 wiki/
 ├── index.md         # 전체 카탈로그 (지식 페이지 변경 시 업데이트)
@@ -109,6 +110,8 @@ protected: false
 ---
 ```
 
+날짜(`updated`, `ingested_at`, 리포트 `date`)는 한국시간(Asia/Seoul) 기준 `YYYY-MM-DD`를 사용한다.
+
 운영 파일(`wiki/index.md`, `wiki/log.md`, `wiki/hot.md`)은 아래 메타 스키마를 사용한다:
 
 ```yaml
@@ -158,11 +161,11 @@ updated: YYYY-MM-DD
    }
    ```
 
-   f. **로그 기록**: `wiki/log.md` 맨 끝에 추가 (파일 읽지 않고 append)
+   f. **로그 기록**: `wiki/log.md` 맨 끝에 추가
    - 형식: `## [YYYY-MM-DD] ingest | [소스 제목]`
    - 내용: 생성/수정된 페이지 목록, 핵심 인사이트 한 줄
 
-   g. **hot.md 갱신**: `wiki/hot.md` 읽고 덮어쓴다. Last Updated, Key Recent Facts, Recent Changes 섹션을 이번 인제스트 결과로 업데이트 (~300~500단어 유지)
+   g. **hot.md 갱신**: `wiki/hot.md` 읽고 덮어쓴다. 마지막 업데이트, 주요 사실, 최근 변경, 진행 중인 작업, 미해결 질문 섹션을 이번 인제스트 결과로 업데이트 (~300~500단어 유지)
 
 4. 완료 후 생성·수정 페이지 목록 보여줌. 한 줄 안내: "강조하고 싶은 부분이나 방향을 바꾸고 싶으면 말씀해주세요."
 
@@ -302,6 +305,8 @@ sources: [] # 참조한 wiki/ 또는 raw/ 파일 목록
    - `wiki/comparisons/_index.md`
    - `wiki/questions/_index.md`
    - `wiki/hot.md` (기본 템플릿으로)
+   - `raw/assets/`
+   - `raw/research/`
    - `raw/.manifest.json` (`{"version": 1, "sources": {}}` 으로)
    - `exports/`
 
@@ -313,7 +318,40 @@ sources: [] # 참조한 wiki/ 또는 raw/ 파일 목록
 
 ---
 
-### 6. Save — 대화 내용 위키 저장
+### 6. Web Research — 웹 수집 후 raw 저장
+
+**트리거**: "웹 리서치", "조사해줘", "리서치해줘", URL 수집, `/wiki-web-research [주제]`.
+
+**원칙**: 웹 리서치는 `wiki/`를 직접 수정하지 않는다. 결과를 `raw/research/`에 저장하고, 사용자가 검토한 뒤 Ingest 절차로 위키화한다.
+
+**절차**:
+
+1. 주제 미입력 시 "어떤 주제를 리서치할까요?" 질문
+2. `.claude/web-research-program.md`가 있으면 검색 목표·제한·도메인 설정을 참고
+3. 주제를 3~5개 검색 각도로 나누어 웹 검색·수집
+4. 일반 웹 페이지는 가능하면 `defuddle parse <url> --md` 사용, `.md` URL은 직접 fetch
+5. 수집 실패, 상충 내용, 미해결 질문은 결과 파일에 기록
+6. `raw/research/YYYY-MM-DD-[슬러그].md`에 독립 마크다운으로 저장
+7. `raw/.manifest.json`, `wiki/index.md`, `wiki/log.md`, `wiki/hot.md`는 변경하지 않는다
+
+저장 파일 권장 구조:
+
+```markdown
+---
+title: "리서치: [주제]"
+type: research
+date: YYYY-MM-DD
+topic: [주제 키워드]
+rounds: N
+sources_fetched: N
+---
+```
+
+완료 후 저장 위치와 핵심 발견, 미해결 질문 수를 보고한다. 위키에 추가하려면 Ingest 절차로 진행한다.
+
+---
+
+### 7. Save — 대화 내용 위키 저장
 
 **트리거**: "저장해줘", "위키에 저장", "대화 저장", "이거 메모", 세션 종료 시 저장 요청.
 

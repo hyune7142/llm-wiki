@@ -3,17 +3,16 @@ title: {{소스 제목}}
 type: source
 summary: 핵심 요약 (60자 이내)
 tags: []
-keywords: []
-sources:
-  - raw/파일명.md
+keywords: [] # 핵심 용어 5~10개 — query 필터링에 사용
+sources: []
+updated: {{YYYY-MM-DD}}
+protected: false
 source_type: article | research | video | podcast | book | memo | other
 original_url:
 author:
 published:
 captured_at:
 reliability: high | medium | low | unknown
-updated: {{YYYY-MM-DD}}
-protected: false
 ---
 
 # {{소스 제목}}

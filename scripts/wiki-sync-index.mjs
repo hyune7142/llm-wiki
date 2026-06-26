@@ -4,7 +4,12 @@ import path from "node:path";
 
 const root = process.cwd();
 const wikiDir = path.join(root, "wiki");
-const today = new Date().toISOString().slice(0, 10);
+const today = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Seoul",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+}).format(new Date());
 
 function walk(dir) {
   if (!fs.existsSync(dir)) return [];
@@ -56,6 +61,10 @@ function formatList(value) {
   return String(value);
 }
 
+function tableCell(value) {
+  return String(value ?? "").replaceAll("|", "\\|").replace(/\r?\n/g, " ").trim();
+}
+
 const knowledgeFiles = walk(wikiDir)
   .filter((file) => {
     const rel = path.relative(root, file);
@@ -71,7 +80,7 @@ const knowledgeFiles = walk(wikiDir)
   .sort((a, b) => a.rel.localeCompare(b.rel));
 
 const rows = knowledgeFiles.map(({ rel, fm }) => {
-  return `| ${rel} | ${fm.title || ""} | ${fm.type || ""} | ${formatList(fm.tags)} | ${formatList(fm.keywords)} | ${fm.summary || ""} | ${fm.updated || ""} |`;
+  return `| ${tableCell(rel)} | ${tableCell(fm.title)} | ${tableCell(fm.type)} | ${tableCell(formatList(fm.tags))} | ${tableCell(formatList(fm.keywords))} | ${tableCell(fm.summary)} | ${tableCell(fm.updated)} |`;
 });
 
 const content = `---

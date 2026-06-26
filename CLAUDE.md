@@ -44,7 +44,9 @@ wiki/
 └── questions/      ← 저장된 질의응답 아카이브
 
 raw/
-└── .manifest.json  ← 처리된 소스 추적 (hash + 생성 페이지 목록)
+├── .manifest.json  ← 처리된 소스 추적 (hash + 생성 페이지 목록)
+├── assets/         ← 이미지 등 첨부파일
+└── research/       ← 웹 리서치 결과 임시 저장
 
 exports/            ← 위키 내용을 외부 공유·발표용으로 가공한 독립 문서 (/wiki-report)
 
@@ -55,6 +57,8 @@ _templates/
 ├── comparison.md   ← 비교 분석 노트 템플릿
 └── question.md     ← 질의응답 아카이빙 템플릿
 ```
+
+날짜(`updated`, `ingested_at`, 리포트 `date`)는 한국시간(Asia/Seoul) 기준 `YYYY-MM-DD`를 사용한다.
 
 ---
 
@@ -97,6 +101,19 @@ updated: YYYY-MM-DD
 protected: false
 ---
 ```
+
+source 타입은 아래 확장 필드를 추가로 사용한다:
+
+```yaml
+source_type: article | research | video | podcast | book | memo | other
+original_url:
+author:
+published:
+captured_at:
+reliability: high | medium | low | unknown
+```
+
+entity 타입은 인제스트 시 내용에 맞는 `subtype`이 자동 지정된다.
 
 운영 파일(`wiki/index.md`, `wiki/log.md`, `wiki/hot.md`):
 

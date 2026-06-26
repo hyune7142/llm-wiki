@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 
 const root = process.cwd();
 const wikiDir = path.join(root, "wiki");
@@ -73,6 +74,10 @@ function fail(message) {
 
 function warn(message) {
   warnings.push(message);
+}
+
+function sha256(file) {
+  return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
 }
 
 const files = walk(wikiDir);
@@ -162,9 +167,33 @@ try {
   if (!manifest.sources || typeof manifest.sources !== "object" || Array.isArray(manifest.sources)) {
     fail("raw/.manifest.json: sources must be an object");
   } else {
+    const seenHashes = new Map();
     for (const [sourcePath, entry] of Object.entries(manifest.sources)) {
-      if (!fs.existsSync(path.join(root, sourcePath))) fail(`manifest: missing raw source ${sourcePath}`);
-      for (const field of ["sha256", "size", "ingested_at", "status", "pages_created", "pages_updated"]) {
+      if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
+        fail(`manifest ${sourcePath}: entry must be an object`);
+        continue;
+      }
+      const sourceFile = path.join(root, sourcePath);
+      if (!fs.existsSync(sourceFile)) {
+        fail(`manifest: missing raw source ${sourcePath}`);
+      } else {
+        const actualHash = sha256(sourceFile);
+        const actualSize = fs.statSync(sourceFile).size;
+        if (entry.sha256 && entry.sha256 !== actualHash) {
+          fail(`manifest ${sourcePath}: sha256 does not match current file`);
+        }
+        if ("size" in entry && Number(entry.size) !== actualSize) {
+          fail(`manifest ${sourcePath}: size does not match current file`);
+        }
+        if (entry.sha256) {
+          if (seenHashes.has(entry.sha256)) {
+            warn(`manifest ${sourcePath}: duplicate sha256 also used by ${seenHashes.get(entry.sha256)}`);
+          } else {
+            seenHashes.set(entry.sha256, sourcePath);
+          }
+        }
+      }
+      for (const field of ["sha256", "size", "title", "source_type", "ingested_at", "status", "pages_created", "pages_updated"]) {
         if (!(field in entry)) fail(`manifest ${sourcePath}: missing ${field}`);
       }
       for (const page of [...(entry.pages_created || []), ...(entry.pages_updated || [])]) {
@@ -174,6 +203,31 @@ try {
   }
 } catch (error) {
   fail(`raw/.manifest.json: invalid JSON (${error.message})`);
+}
+
+const syncFields = [
+  ["위키 이름", /- \*\*위키 이름\*\*:\s*(.+)/],
+  ["도메인 \/ 주제", /- \*\*도메인 \/ 주제\*\*:\s*(.+)/],
+  ["목적", /- \*\*목적\*\*:\s*(.+)/],
+  ["주요 소스 유형", /- \*\*주요 소스 유형\*\*:\s*(.+)/],
+  ["강조 관점 \/ 정리 방식", /- \*\*강조 관점 \/ 정리 방식\*\*:\s*(.+)/],
+];
+
+const claudeMdPath = path.join(root, "CLAUDE.md");
+const agentsMdPath = path.join(root, "AGENTS.md");
+
+if (fs.existsSync(claudeMdPath) && fs.existsSync(agentsMdPath)) {
+  const claudeText = fs.readFileSync(claudeMdPath, "utf8");
+  const agentsText = fs.readFileSync(agentsMdPath, "utf8");
+  for (const [fieldName, pattern] of syncFields) {
+    const claudeMatch = claudeText.match(pattern);
+    const agentsMatch = agentsText.match(pattern);
+    const claudeVal = claudeMatch ? claudeMatch[1].trim() : "(없음)";
+    const agentsVal = agentsMatch ? agentsMatch[1].trim() : "(없음)";
+    if (claudeVal !== agentsVal) {
+      fail(`CLAUDE.md ↔ AGENTS.md 불일치: "${fieldName}" — CLAUDE.md: "${claudeVal}", AGENTS.md: "${agentsVal}"`);
+    }
+  }
 }
 
 for (const message of errors) console.error(`ERROR ${message}`);

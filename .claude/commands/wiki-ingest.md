@@ -58,10 +58,11 @@ description: raw/ 파일을 위키 페이지로 변환. 소스 추가·처리·i
      "pages_updated": ["wiki/index.md", "wiki/entities/개체명.md", ...]
    }
    ```
-7. **로그 기록**: `wiki/log.md` 파일 맨 끝에 다음 형식으로 항목을 추가한다 (파일을 읽지 않고 Edit으로 바로 추가):
+   - `ingested_at`, `updated` 날짜는 한국시간(Asia/Seoul) 기준 `YYYY-MM-DD`를 사용한다.
+7. **로그 기록**: `wiki/log.md` 파일 맨 끝에 다음 형식으로 항목을 추가한다:
    - 형식: `## [YYYY-MM-DD] ingest | [소스 제목]`
    - 내용: 생성/수정된 페이지 목록, 핵심 인사이트 한 줄 요약
-8. **hot.md 갱신**: `wiki/hot.md`를 읽고 덮어쓴다. Last Updated, Key Recent Facts, Recent Changes, Active Threads, Open Questions 섹션을 이번 인제스트 결과로 업데이트한다 (~300~500단어 유지).
+8. **hot.md 갱신**: `wiki/hot.md`를 읽고 덮어쓴다. 마지막 업데이트, 주요 사실, 최근 변경, 진행 중인 작업, 미해결 질문 섹션을 이번 인제스트 결과로 업데이트한다 (~300~500단어 유지).
 9. **검증**: `node scripts/wiki-lint.mjs`를 실행하고 오류가 있으면 수정한다.
 
 처리가 끝나면 생성·수정된 페이지 목록을 사용자에게 보여준다. 이후 한 줄 안내: "강조하고 싶은 부분이나 방향을 바꾸고 싶으면 말씀해주세요."

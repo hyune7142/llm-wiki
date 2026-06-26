@@ -65,5 +65,5 @@ protected: false
 
 수정 작업을 수행한 경우에만 `wiki/log.md` 파일 맨 끝에 항목을 추가한다 (파일을 읽지 않고 Edit으로 바로 추가):
 - 형식: `## [YYYY-MM-DD] lint | 발견 [N]건, 수정 [M]건`
-수정 작업을 수행한 경우에만 `wiki/hot.md`도 Last Updated와 Recent Changes 중심으로 갱신한다.
+수정 작업을 수행한 경우에만 `wiki/hot.md`도 마지막 업데이트와 최근 변경 중심으로 갱신한다.
 수정 없이 점검 보고만 한 경우 `wiki/log.md`와 `wiki/hot.md`를 변경하지 않는다.

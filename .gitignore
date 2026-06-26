@@ -13,6 +13,9 @@
 # raw 소스 파일 — 각자의 자료이므로 공유하지 않음
 raw/**
 !raw/assets/
+!raw/assets/.gitkeep
+!raw/research/
+!raw/research/.gitkeep
 !raw/.manifest.json
 
 # wiki 생성 콘텐츠 — 각자의 위키이므로 공유하지 않음

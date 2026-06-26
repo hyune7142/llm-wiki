@@ -13,28 +13,20 @@ description: 위키 초기 설정 또는 설정 변경. CLAUDE.md 업데이트·
 2. 다섯 질문이 모두 끝나면 수집한 정보를 요약해서 보여주고 확인을 요청한다.
 3. 사용자가 확인하면 AGENTS.md와 CLAUDE.md의 `## 위키 기본 정보` 섹션을 동시에 업데이트한다:
    - `[미설정]` → 사용자 답변으로 교체
-3-1. `wiki/overview.md`를 읽고 수집한 정보(목적·도메인·소스 유형·정리 방식)를 반영해 업데이트한다.
-3-2. 아래 폴더 구조가 없으면 생성한다 (있으면 스킵):
+4. `wiki/overview.md`를 읽고 수집한 정보(목적·도메인·소스 유형·정리 방식)를 반영해 업데이트한다.
+5. 아래 폴더·파일이 없으면 생성한다 (있으면 스킵):
    - `wiki/sources/_index.md`
    - `wiki/entities/_index.md`
    - `wiki/concepts/_index.md`
    - `wiki/comparisons/_index.md`
    - `wiki/questions/_index.md`
    - `wiki/hot.md` (없는 경우만 기본 템플릿으로 생성)
+   - `raw/assets/`
+   - `raw/research/`
    - `raw/.manifest.json` (없는 경우만 `{"version": 1, "sources": {}}` 으로 생성)
    - `exports/`
-3-3. Defuddle CLI 설치 확인 및 자동 설치:
-   - `which defuddle` 또는 `defuddle --version`으로 설치 여부 확인
-   - 미설치 시: 설치 전 아래 내용을 사용자에게 설명하고 동의를 구한다:
-     > **Defuddle 설치 안내**
-     > 웹 페이지를 위키에 추가할 때 사용하는 도구입니다. 광고·네비게이션을 제거하고 본문만 깔끔하게 추출해줍니다 (`npm install -g defuddle`).
-     > 설치할까요?
-   - 사용자가 동의하면 `npm install -g defuddle` 실행
-   - 사용자가 거절하면 스킵 (나중에 수동 설치 가능: `npm install -g defuddle`)
-   - 설치 성공/실패 여부를 사용자에게 알린다
-4. `wiki/log.md`와 `wiki/hot.md`는 변경하지 않는다. 초기 설정은 운영 이력으로 누적하지 않는다.
-4-1. 가능하면 `node scripts/wiki-sync-index.mjs`와 `node scripts/wiki-lint.mjs`를 실행해 초기 상태를 검증한다.
-5. 설정 완료 메시지와 함께 다음 단계를 안내한다:
+6. `wiki/log.md`와 `wiki/hot.md`는 변경하지 않는다. 초기 설정은 운영 이력으로 누적하지 않는다. 가능하면 `node scripts/wiki-sync-index.mjs`와 `node scripts/wiki-lint.mjs`를 실행해 초기 상태를 검증한다.
+7. 설정 완료 메시지와 함께 다음 단계를 안내한다:
    - `raw/` 폴더에 첫 소스를 넣고 "이 파일 처리해줘"라고 말하면 ingest가 시작됩니다.
    - 언제든 `/wiki-init`을 다시 실행해서 설정을 수정할 수 있습니다.
 
